@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'koneksi.php';
 
 // Ambil data dari tabel MySQL
@@ -18,9 +18,6 @@ $total_records = count($data);
 
 // Hitung jumlah rekaman dalam setiap kelas
 $class_counts = array_count_values(array_column($data, 'attack_cat'));
-
-// Hitung jumlah fitur
-$num_features = count($data[0]) - 1; // Kurangi satu karena kolom terakhir adalah label kelas
 
 // Hitung entropi dataset
 $entropy = 0;
@@ -56,9 +53,8 @@ $statistics = [
     "sbytes" => [],
     "sttl" => [],
     "smean" => [],
-    "" => []
+    "null" => [],
 ];
-
 
 foreach ($statistics as $feature => &$values) {
     $total_gain_attribute = 0;
@@ -75,11 +71,15 @@ foreach ($statistics as $feature => &$values) {
     } elseif ($feature == "smean") {
         // Kelompokkan smean menjadi <=78 dan >78
         $unique_values = ["<=78", ">78"];
-    }else {
+    } else {
         $unique_values = array_unique(array_column($data, $feature));
     }
 
     foreach ($unique_values as $value) {
+        if ($feature === "null") {
+            continue; // Skip null feature
+        }
+
         $subset_entropy = 0;
         $value_count = 0;
         $class_counts_subset = [];
@@ -117,11 +117,9 @@ foreach ($statistics as $feature => &$values) {
 
             $gain_subset = $subset_probability * $subset_entropy;
             $gain += $gain_subset;
-
         }
 
         $split_info_subset -= $subset_probability * log($subset_probability,2);
-
 
         $values[] = [
             "Value" => $value,
@@ -133,12 +131,12 @@ foreach ($statistics as $feature => &$values) {
             "Entropy" => $subset_entropy,
             "Gain" => $gain_subset,
             "Split_Info" => $split_info_subset,
-
         ];
     }
-    
 }
 
+$gain_ratios = [];
+$best_attribute = '';
 
 ?>
 <!doctype html>
@@ -190,14 +188,17 @@ foreach ($statistics as $feature => &$values) {
         <div class="page-content-wrapper">
             <!-- start page content-->
             <div class="page-content">
-        <h3>Total Entropy : <?php echo $total_entropy ?></h3>
+                <h3>Total Entropy : <?php echo $total_entropy ?></h3>
+
                 <?php
                 // Tampilkan statistik yang dihitung
                 foreach ($statistics as $feature => $values) {
+                    if ($feature === "null") {
+                        continue; // Skip null feature
+                    }
                     echo "<h6 class='mb-0 text-uppercase'>$feature</h6>";
                     echo "<table border='1'>";
-                    echo "<tr><th>Value</th><th>Jml Record</th><th>Fuzzers</th><th>Exploits</th><th>Generic</th><th>Normal</th><th>Entropy</th><th>Gain</th><th>Split Ratio</th>
-                    <th>Gain Ratio</th></tr>";
+                    echo "<tr><th>Value</th><th>Jml Record</th><th>Fuzzers</th><th>Exploits</th><th>Generic</th><th>Normal</th><th>Entropy</th><th>Gain</th></tr>";
                     foreach ($values as $value) {
                         echo "<tr>";
                         echo "<td>{$value['Value']}</td>";
@@ -208,7 +209,6 @@ foreach ($statistics as $feature => &$values) {
                         echo "<td>{$value['Normal']}</td>";
                         echo "<td>{$value['Entropy']}</td>";
                         echo "<td>{$value['Gain']}</td>";
-                        echo "<td>{$value['Split_Info']}</td>";
                         echo "</tr>";
                     }
                     $total_gain_attribute = 0;
@@ -223,38 +223,36 @@ foreach ($statistics as $feature => &$values) {
 
                     $gain_ratio_total = $total_gain / $total_split_info;
 
+                    $gain_ratios[$feature] = $gain_ratio_total;
+
                     echo "</table>";
                     echo "<td>Gain : $total_gain</td>";
+                    echo "<br>";
                     echo "<td>Split Ratios : {$total_split_info}</td>";
+                    echo "<br>";
                     echo "<td>Gain Ratios : {$gain_ratio_total}</td>";
                     echo "<br>";
                     echo "<br>";
+
+                    $best_attribute = array_search(max($gain_ratios), $gain_ratios);
+                }
+                echo "The best attribute to split on is: $best_attribute";
+
+                // Display another table for the best attribute
+                if (!empty($best_attribute)) {
+                    echo "<h4>Values for Best Attribute ($best_attribute)</h4>";
+                    echo "<table border='1'>";
+                    echo "<tr><th>Value</th><th>Count</th></tr>";
+
+                    // Fetch unique values for the best attribute
+                    $best_attribute_values = array_unique(array_column($data, $best_attribute));
+                    foreach ($best_attribute_values as $value) {
+                       
+                    }
+
+                    echo "</table>";
                 }
                 ?>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>service</th>
-                                        <th>spkts</th>
-                                        <th>sbytes</th>
-                                        <th>sttl</th>
-                                        <th>smean</th>
-                                        <th>attack cat</th>
-                                        <th>aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
 
             </div>
             <!-- end page content-->
