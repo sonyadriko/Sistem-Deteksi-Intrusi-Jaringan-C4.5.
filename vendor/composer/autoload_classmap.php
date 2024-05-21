@@ -6,6 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Algorithm\\C45' => $vendorDir . '/medansoftware/c45-algorithm-php/src/C45.php',
+    'Algorithm\\C45\\Calculator\\AbstractCalculator' => $vendorDir . '/medansoftware/c45-algorithm-php/src/Calculator/AbstractCalculator.php',
+    'Algorithm\\C45\\Calculator\\GainCalculator' => $vendorDir . '/medansoftware/c45-algorithm-php/src/Calculator/GainCalculator.php',
+    'Algorithm\\C45\\Calculator\\GainRatioCalculator' => $vendorDir . '/medansoftware/c45-algorithm-php/src/Calculator/GainRatioCalculator.php',
+    'Algorithm\\C45\\Calculator\\SplitInfoCalculator' => $vendorDir . '/medansoftware/c45-algorithm-php/src/Calculator/SplitInfoCalculator.php',
+    'Algorithm\\C45\\DataInput' => $vendorDir . '/medansoftware/c45-algorithm-php/src/DataInput/DataInput.php',
+    'Algorithm\\C45\\DataInput\\DataInputInterface' => $vendorDir . '/medansoftware/c45-algorithm-php/src/DataInput/DataInputInterface.php',
+    'Algorithm\\C45\\TreeNode' => $vendorDir . '/medansoftware/c45-algorithm-php/src/TreeNode.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
 );

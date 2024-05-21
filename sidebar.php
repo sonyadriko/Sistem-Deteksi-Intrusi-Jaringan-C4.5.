@@ -17,14 +17,14 @@
                 <div class="menu-title">Dashboard</div>
             </a>
         </li>
-        <li>
+        <!-- <li>
             <a href="data_training.php">
                 <div class="parent-icon">
                     <ion-icon name="home-outline"></ion-icon>
                 </div>
                 <div class="menu-title">Data Training</div>
             </a>
-        </li>
+        </li> -->
         <li>
             <a href="mining.php">
                 <div class="parent-icon">
@@ -33,7 +33,7 @@
                 <div class="menu-title">Mining</div>
             </a>
         </li>
-        <li>
+        <!-- <li>
             <a href="pohon_keputusan.php">
                 <div class="parent-icon">
                     <ion-icon name="home-outline"></ion-icon>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="menu-title">Hasil Prediksi</div>
             </a>
-        </li>
+        </li> -->
     </ul>
     <!--end navigation-->
 </aside>

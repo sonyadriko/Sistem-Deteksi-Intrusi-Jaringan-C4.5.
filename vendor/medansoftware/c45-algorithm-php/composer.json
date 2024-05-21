@@ -1,0 +1,20 @@
+{
+	"name": "medansoftware/c45-algorithm-php",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Agung Dirgantara",
+			"email": "agungmasda29@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.5",
+		"phpoffice/phpspreadsheet": "^1.9"
+	},
+	"autoload": {
+		 "classmap": [
+		 	"src"
+		 ]
+	}
+}

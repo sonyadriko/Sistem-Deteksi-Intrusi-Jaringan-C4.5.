@@ -25,6 +25,10 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
         array (
             'ZipStream\\' => 10,
         ),
+        'T' => 
+        array (
+            'Test\\' => 5,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php72\\' => 23,
@@ -44,9 +48,14 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
         array (
             'Matrix\\' => 7,
         ),
+        'D' => 
+        array (
+            'DataReader\\' => 11,
+        ),
         'C' => 
         array (
             'Complex\\' => 8,
+            'C45\\' => 4,
         ),
     );
 
@@ -63,6 +72,10 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Test\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/juliardi/data-reader/tests',
         ),
         'Symfony\\Polyfill\\Php72\\' => 
         array (
@@ -90,8 +103,8 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -105,13 +118,29 @@ class ComposerStaticInit62e10e6c8df9afc192311b196c75bb33
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
+        'DataReader\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/juliardi/data-reader/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
         ),
+        'C45\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/juliardi/c45/src',
+        ),
     );
 
     public static $classMap = array (
+        'Algorithm\\C45' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/C45.php',
+        'Algorithm\\C45\\Calculator\\AbstractCalculator' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/Calculator/AbstractCalculator.php',
+        'Algorithm\\C45\\Calculator\\GainCalculator' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/Calculator/GainCalculator.php',
+        'Algorithm\\C45\\Calculator\\GainRatioCalculator' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/Calculator/GainRatioCalculator.php',
+        'Algorithm\\C45\\Calculator\\SplitInfoCalculator' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/Calculator/SplitInfoCalculator.php',
+        'Algorithm\\C45\\DataInput' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/DataInput/DataInput.php',
+        'Algorithm\\C45\\DataInput\\DataInputInterface' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/DataInput/DataInputInterface.php',
+        'Algorithm\\C45\\TreeNode' => __DIR__ . '/..' . '/medansoftware/c45-algorithm-php/src/TreeNode.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     );
