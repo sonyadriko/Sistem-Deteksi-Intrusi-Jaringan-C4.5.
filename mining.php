@@ -122,7 +122,7 @@ include 'koneksi.php'; ?>
 
                     // Load data from the 'data_training' table and convert it into an array
                     $data_training = [];
-                    $result = $conn->query("SELECT * FROM data_training");
+                    $result = $conn->query("SELECT service, spkts, sbytes, sttl, smean, attack_cat FROM data_training");
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $data_training[] = $row;
