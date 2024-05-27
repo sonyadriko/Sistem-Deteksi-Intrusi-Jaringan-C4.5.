@@ -50,7 +50,16 @@
             <!-- start page content-->
             <div class="page-content">
 
-                <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-4">
+                <p>Algoritma C4.5 adalah metode untuk membangun pohon keputusan yang dikembangkan oleh Ross Quinlan
+                    sebagai penyempurnaan dari algoritma ID3. Algoritma ini memilih atribut yang paling efektif dalam
+                    memisahkan data berdasarkan Gain Ratio, membagi dataset berdasarkan nilai atribut tersebut, dan
+                    mengulangi proses ini untuk setiap subset data hingga pohon selesai. C4.5 dapat menangani atribut
+                    kontinu, missing values, dan menerapkan pruning untuk mengurangi overfitting, menjadikannya lebih
+                    robust dibandingkan ID3. Meskipun demikian, C4.5 bisa menjadi lambat dan membutuhkan banyak memori
+                    untuk dataset yang sangat besar.
+                </p>
+
+                <!-- <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-4">
                     <div class="col">
                         <div class="card radius-10">
                             <div class="card-body">
@@ -131,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--end row-->
 
 

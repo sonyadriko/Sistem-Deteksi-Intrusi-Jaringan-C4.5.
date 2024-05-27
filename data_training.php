@@ -41,6 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $smean = $rowData[4];
                             $attack_cat = $rowData[5];
 
+                            // Determine spkts category based on the value
+                            $spkts = $spkts <= 14 ? 'low' : 'high';
+
+                            // Determine sbytes category based on the value
+                            $sbytes = (int) $sbytes <= 132 ? 'low' : 'high';
+
+                            // Determine sttl category based on the value
+                            $sttlValue = (int) $sttl;
+                            if ($sttlValue <= 31) {
+                                $sttl = 'low';
+                            } elseif ($sttlValue <= 62) {
+                                $sttl = 'med';
+                            } else {
+                                $sttl = 'high';
+                            }
+
+                            // Determine smean category based on the value
+                            $smean = (int) $smean <= 84 ? 'low' : 'high';
+
                             // Insert data into the 'handphone' table
                             $stmtInsert->bind_param('ssssss', $service, $spkts, $sbytes, $sttl, $smean, $attack_cat);
                             if ($stmtInsert->execute()) {
@@ -203,6 +222,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php $no++; } ?>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="clear_all_data.php" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete All Data</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

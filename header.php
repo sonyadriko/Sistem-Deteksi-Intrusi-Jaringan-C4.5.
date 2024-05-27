@@ -6,13 +6,13 @@
         <div class="top-navbar-right ms-auto">
 
             <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link dark-mode-icon" href="javascript:;">
                         <div class="mode-icon">
                             <ion-icon name="moon-outline"></ion-icon>
                         </div>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item dropdown dropdown-user-setting">
                     <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                         data-bs-toggle="dropdown">
