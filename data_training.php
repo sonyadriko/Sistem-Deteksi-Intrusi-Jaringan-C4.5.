@@ -42,23 +42,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $attack_cat = $rowData[5];
 
                             // Determine spkts category based on the value
-                            $spkts = $spkts <= 14 ? 'low' : 'high';
+                            // $spkts = $spkts <= 10 ? 'low' : 'high';
 
                             // Determine sbytes category based on the value
-                            $sbytes = (int) $sbytes <= 132 ? 'low' : 'high';
+                            // $sbytes = (int) $sbytes <= 768 ? 'low' : 'high';
 
                             // Determine sttl category based on the value
-                            $sttlValue = (int) $sttl;
-                            if ($sttlValue <= 31) {
-                                $sttl = 'low';
-                            } elseif ($sttlValue <= 62) {
-                                $sttl = 'med';
-                            } else {
-                                $sttl = 'high';
-                            }
+                            // $sttlValue = (int) $sttl;
+                            // if ($sttlValue <= 31) {
+                            //     $sttl = 'low';
+                            // } elseif ($sttlValue <= 62) {
+                            //     $sttl = 'med';
+                            // } else {
+                            //     $sttl = 'high';
+                            // }
 
                             // Determine smean category based on the value
-                            $smean = (int) $smean <= 84 ? 'low' : 'high';
+                            // $smean = (int) $smean <= 78 ? 'low' : 'high';
 
                             // Insert data into the 'handphone' table
                             $stmtInsert->bind_param('ssssss', $service, $spkts, $sbytes, $sttl, $smean, $attack_cat);

@@ -70,11 +70,11 @@ include 'koneksi.php'; ?>
         <div class="page-content-wrapper">
             <!-- start page content-->
             <div class="page-content">
-                <form method="post" enctype="multipart/form-data">
-                    <!-- <div class="mb-3">
+                <!-- <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
                         <label for="file" class="form-label">Upload Excel File</label>
                         <input type="file" class="form-control" id="file" name="file">
-                    </div> -->
+                    </div> 
                     <div class="mb-3">
                         <label for="service" class="form-label">Service</label>
                         <select class="form-select" id="service" name="service">
@@ -100,7 +100,7 @@ include 'koneksi.php'; ?>
                         <input type="text" class="form-control" id="smean" name="smean">
                     </div>
                     <button type="submit" class="btn btn-primary">Generate</button>
-                </form>
+                </form> -->
 
                 <?php
                 ini_set('display_errors', 1);
@@ -109,6 +109,58 @@ include 'koneksi.php'; ?>
                 require_once __DIR__ . '/vendor/autoload.php';
 
                 use C45\C45;
+
+                $data_training = [];
+                $result = $conn->query("SELECT service, spkts, sbytes, sttl, smean, attack_cat FROM data_training");
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        // Convert spkts data to category based on the value
+                        $row['spkts'] = $row['spkts'] <= 10 ? 'low' : 'high';
+                        $row['sbytes'] = $row['sbytes'] <= 768 ? 'low' : 'high';
+                        $row['sttl'] = $row['sttl'] == 31 ? 'low' : ($row['sttl'] == 62 ? 'med' : 'high');
+                        $row['smean'] = $row['smean'] <= 78 ? 'low' : 'high';
+                        $data_training[] = $row;
+                    }
+                }
+
+                   // Determine spkts category based on the value
+                        // $spkts = $spkts <= 10 ? 'low' : 'high';
+
+                        // Determine sbytes category based on the value
+                        // $sbytes = (int) $sbytes <= 768 ? 'low' : 'high';
+
+                        // Determine sttl category based on the value
+                        // $sttlValue = (int) $sttl;
+                        // if ($sttlValue <= 31) {
+                        //     $sttl = 'low';
+                        // } elseif ($sttlValue <= 62) {
+                        //     $sttl = 'med';
+                        // } else {
+                        //     $sttl = 'high';
+                        // }
+
+                        // Determine smean category based on the value
+                        // $smean = (int) $smean <= 78 ? 'low' : 'high';
+                // var_dump($data_training);
+
+                
+
+                $c45 = new Algorithm\C45();
+                $input = new Algorithm\C45\DataInput;
+                $input->setData($data_training);
+                $input->setAttributes(array('service', 'spkts', 'sbytes', 'sttl', 'smean', 'attack_cat'));
+                $c45->c45 = $input; // Set input data
+                $c45->setTargetAttribute('attack_cat');
+                $initialize = $c45->initialize();
+                // $c45->loadFile($uploadedFile)->setTargetAttribute('attack_cat')->initialize();
+                echo "<pre>";
+                $datal = $initialize->buildTree()->toString();
+                // print_r ($initialize->buildTree()->toString()); // print as string
+                print_r($datal);
+                // echo json_encode($initialize->buildTree()->toString());
+                $datall = json_encode($datal);
+                // echo json_encode($datal);
+                echo "</pre>";
 
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // $uploadedFile = $_FILES['file']['tmp_name'];
@@ -125,9 +177,33 @@ include 'koneksi.php'; ?>
                     $result = $conn->query("SELECT service, spkts, sbytes, sttl, smean, attack_cat FROM data_training");
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
+                            // Convert spkts data to category based on the value
+                            $row['spkts'] = $row['spkts'] <= 10 ? 'low' : 'high';
+                            $row['sbytes'] = $row['sbytes'] <= 768 ? 'low' : 'high';
+                            $row['sttl'] = $row['sttl'] == 31 ? 'low' : ($row['sttl'] == 62 ? 'med' : 'high');
+                            $row['smean'] = $row['smean'] <= 78 ? 'low' : 'high';
                             $data_training[] = $row;
                         }
                     }
+
+                       // Determine spkts category based on the value
+                            // $spkts = $spkts <= 10 ? 'low' : 'high';
+
+                            // Determine sbytes category based on the value
+                            // $sbytes = (int) $sbytes <= 768 ? 'low' : 'high';
+
+                            // Determine sttl category based on the value
+                            // $sttlValue = (int) $sttl;
+                            // if ($sttlValue <= 31) {
+                            //     $sttl = 'low';
+                            // } elseif ($sttlValue <= 62) {
+                            //     $sttl = 'med';
+                            // } else {
+                            //     $sttl = 'high';
+                            // }
+
+                            // Determine smean category based on the value
+                            // $smean = (int) $smean <= 78 ? 'low' : 'high';
                     // var_dump($data_training);
 
                     
@@ -148,8 +224,8 @@ include 'koneksi.php'; ?>
                     $datall = json_encode($datal);
                     // echo json_encode($datal);
                     echo "</pre>";
-                    $result = $initialize->initialize()->buildTree()->classify($new_data);
-                    echo "Hasil Klasifikasi: " . $result;
+                    // $result = $initialize->initialize()->buildTree()->classify($new_data);
+                    // echo "Hasil Klasifikasi: " . $result;
                 }
                 ?>
                 <!-- <div id="tree"></div> -->
