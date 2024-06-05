@@ -33,6 +33,14 @@
                 <div class="menu-title">Mining</div>
             </a>
         </li>
+        <li>
+            <a href="testing.php">
+                <div class="parent-icon">
+                    <ion-icon name="home-outline"></ion-icon>
+                </div>
+                <div class="menu-title">Pengujian</div>
+            </a>
+        </li>
         <!-- <li>
             <a href="pohon_keputusan.php">
                 <div class="parent-icon">

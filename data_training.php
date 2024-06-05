@@ -13,83 +13,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($fileError == UPLOAD_ERR_OK) {
                 $excelFile = $_FILES['excelFile']['tmp_name'];
 
-                try {
-                    // Load the Excel file
-                    $spreadsheet = IOFactory::load($excelFile);
-                    $worksheet = $spreadsheet->getActiveSheet();
+                // Save the uploaded Excel file to the backend folder with the name 'data100.xlsx'
+                $backendExcelFile = '../backend/data100.xlsx';
+                if (move_uploaded_file($excelFile, $backendExcelFile)) {
 
-                    // Prepare the statement for inserting data into the 'handphone' table
-                    $stmtInsert = $conn->prepare('INSERT INTO data_training (`service`, `spkts`, `sbytes`, `sttl`, `smean`, `attack_cat`) VALUES (?, ?, ?, ?, ?, ?)');
+                    try {
+                        // Load the Excel file
+                        $spreadsheet = IOFactory::load($backendExcelFile);
+                        $worksheet = $spreadsheet->getActiveSheet();
 
-                    // Initialize variable for counting successful inserts
-                    $successCount = 0;
+                        // Prepare the statement for inserting data into the 'data_training' table
+                        $stmtInsert = $conn->prepare('INSERT INTO data_training (`service`, `spkts`, `sbytes`, `sttl`, `smean`, `attack_cat`) VALUES (?, ?, ?, ?, ?, ?)');
 
-                    // Iterate through rows and insert data into the 'handphone' table
-                    foreach ($worksheet->getRowIterator() as $row) {
-                        $rowData = [];
-                        foreach ($row->getCellIterator() as $cell) {
-                            $rowData[] = $cell->getValue();
-                        }
+                        // Initialize variable for counting successful inserts
+                        $successCount = 0;
 
-                        // Assuming the Excel columns are in the order specified
-                        if (count($rowData) == 6) {
-                            // Extracting values
-                            $service = $rowData[0];
-                            $spkts = $rowData[1];
-                            $sbytes = $rowData[2];
-                            $sttl = $rowData[3];
-                            $smean = $rowData[4];
-                            $attack_cat = $rowData[5];
+                        // Skip the first row (headers)
+                        $rowIterator = $worksheet->getRowIterator(2);
+                        $rowIterator->next();
 
-                            // Determine spkts category based on the value
-                            // $spkts = $spkts <= 10 ? 'low' : 'high';
+                        // Iterate through rows starting from the second row and insert data into the 'data_training' table
+                        foreach ($rowIterator as $row) {
+                            $rowData = [];
+                            foreach ($row->getCellIterator() as $cell) {
+                                $rowData[] = $cell->getValue();
+                            }
 
-                            // Determine sbytes category based on the value
-                            // $sbytes = (int) $sbytes <= 768 ? 'low' : 'high';
+                            // Assuming the Excel columns are in the order specified
+                            if (count($rowData) == 7) { // Ensure the number of columns matches
+                                // Extracting values, skipping the first column (no.)
+                                $service = $rowData[1];
+                                $spkts = $rowData[2];
+                                $sbytes = $rowData[3];
+                                $sttl = $rowData[4];
+                                $smean = $rowData[5];
+                                $attack_cat = $rowData[6];
 
-                            // Determine sttl category based on the value
-                            // $sttlValue = (int) $sttl;
-                            // if ($sttlValue <= 31) {
-                            //     $sttl = 'low';
-                            // } elseif ($sttlValue <= 62) {
-                            //     $sttl = 'med';
-                            // } else {
-                            //     $sttl = 'high';
-                            // }
-
-                            // Determine smean category based on the value
-                            // $smean = (int) $smean <= 78 ? 'low' : 'high';
-
-                            // Insert data into the 'handphone' table
-                            $stmtInsert->bind_param('ssssss', $service, $spkts, $sbytes, $sttl, $smean, $attack_cat);
-                            if ($stmtInsert->execute()) {
-                                $successCount++; // Increment the count of successful inserts
+                                // Insert data into the 'data_training' table
+                                $stmtInsert->bind_param('ssssss', $service, $spkts, $sbytes, $sttl, $smean, $attack_cat);
+                                if ($stmtInsert->execute()) {
+                                    $successCount++; // Increment the count of successful inserts
+                                }
                             }
                         }
-                    }
 
-                    // Check if any data was successfully inserted
-                    if ($successCount > 0) {
-                        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-                        echo "<script>
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Import successful!',
-                                    text: 'Total $successCount rows inserted.',
-                                    showConfirmButton: true
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = 'data.php';
-                                    }
-                                });
-                              </script>";
-                    } else {
-                        echo '<script>alert("No data inserted.");</script>';
-                    }
+                        // Check if any data was successfully inserted
+                        if ($successCount > 0) {
+                            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+                            echo "<script>
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Import successful!',
+                                        text: 'Total $successCount rows inserted.',
+                                        showConfirmButton: true
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = 'data.php';
+                                        }
+                                    });
+                                  </script>";
+                        } else {
+                            echo '<script>alert("No data inserted.");</script>';
+                        }
 
-                    // exit();
-                } catch (Exception $e) {
-                    echo '<script>alert("Error processing the file: ' . $e->getMessage() . '");</script>';
+                    } catch (Exception $e) {
+                        echo '<script>alert("Error processing the file: ' . $e->getMessage() . '");</script>';
+                    }
+                } else {
+                    echo '<script>alert("Error moving the uploaded file.");</script>';
                 }
             } else {
                 echo '<script>alert("Error uploading the file.");</script>';
@@ -99,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -135,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 
-
     <!--start wrapper-->
     <div class="wrapper">
 
@@ -146,7 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!--start top header-->
         <?php include 'header.php' ?>
         <!--end top header-->
-
 
         <!-- start page content wrapper-->
         <div class="page-content-wrapper">
@@ -192,14 +181,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php
                                     $no = 1;
                                     $get_data = mysqli_query($conn, "select * from data_training");
-                                            while($display = mysqli_fetch_array($get_data)) {
-                                                $id = $display['id_data_training'];
-                                                $service = $display['service'];
-                                                $spkts = $display['spkts'];
-                                                $sbytes = $display['sbytes'];
-                                                $sttl = $display['sttl'];
-                                                $smean = $display['smean'];
-                                                $attack_cat = $display['attack_cat'];
+                                    while($display = mysqli_fetch_array($get_data)) {
+                                        $id = $display['id_data_training'];
+                                        $service = $display['service'];
+                                        $spkts = $display['spkts'];
+                                        $sbytes = $display['sbytes'];
+                                        $sttl = $display['sttl'];
+                                        $smean = $display['smean'];
+                                        $attack_cat = $display['attack_cat'];
                                     ?>
                                     <tr>
                                         <td><?php echo $no; ?></td>
@@ -236,43 +225,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-
-                <!--end row-->
-
-
-                <!--end row-->
-
-
-
             </div>
-            <!-- end page content-->
         </div>
-        <!--end page content wrapper-->
-
-
-        <!--start footer-->
-
-        <!--end footer-->
-
-
-        <!--Start Back To Top Button-->
         <a href="javaScript:;" class="back-to-top">
             <ion-icon name="arrow-up-outline"></ion-icon>
         </a>
-        <!--End Back To Top Button-->
-
-        <!--start switcher-->
-
-        <!--end switcher-->
-
-
-        <!--start overlay-->
         <div class="overlay nav-toggle-icon"></div>
-        <!--end overlay-->
         <?php include 'footer.php' ?>
-
     </div>
-    <!--end wrapper-->
 
     <!-- JS Files-->
     <script src="assets/js/jquery.min.js"></script>
@@ -288,8 +248,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="assets/js/index.js"></script>
     <!-- Main JS-->
     <script src="assets/js/main.js"></script>
-
-
 </body>
 
 </html>
