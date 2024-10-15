@@ -12,10 +12,10 @@ Network Intrusion Detection Systems (NIDS) are essential for monitoring network 
   Visualization: Offers visualization of classification results and network traffic data.
   User-Friendly Interface: Provides an intuitive web interface for managing and viewing network intrusion data.
 <h2>Technologies Used</h2>
-  PHP 8: Used for application logic and server-side processing.
-  MySQL: Used for storing network traffic data and classification results.
-  HTML/CSS/JavaScript: Used for developing the user interface.
-  Bootstrap: Used for responsive design and layout.
+    PHP 8: Used for application logic and server-side processing.
+    MySQL: Used for storing network traffic data and classification results.
+    HTML/CSS/JavaScript: Used for developing the user interface.
+    Bootstrap: Used for responsive design and layout.
 <h2>Contribution</h2>
 Contributions are welcome! Please open an issue for discussion or submit a pull request for improvements or new features.
 <h2>License</h2>
